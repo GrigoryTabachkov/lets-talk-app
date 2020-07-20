@@ -1,10 +1,26 @@
-import { ADD_TOPIC } from './action-types';
+import { WATCH_USER_POSITION } from './action-types';
 
-export const addTopic = (payload) => ({
+export const watchUserPosition = (payload) => ({
   payload,
-  type: ADD_TOPIC,
+  type: WATCH_USER_POSITION,
 }
 );
+export const toSendCoordinat = (payload) => async (dispatch) => {
+  const response = await fetch('/coordinat', {
+    method: 'POST',
+    header: {
+      "Content-Type": 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify({
+      lat: payload.latitude,
+      lng: payload.longitude,
+      },
+    )
+  })
+  const res = await response.json();
+  console.log(res)
+  dispatch(watchUserPosition(res));
+}
 //
 // export const changeTopic = (payload = 'change topic') => ({
 //   payload,
