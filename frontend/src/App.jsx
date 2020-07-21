@@ -1,6 +1,13 @@
 import React, {useState, useEffect} from 'react';
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Link,
+} from 'react-router-dom';
 import './App.css';
 import MapContainer from './components/Map/MapContainer.jsx';
+import Registration from './Registr/Registration'
 // import TalkPerson from './components/TalkPerson/TalkPerson.jsx';
 
 function App() {
@@ -17,7 +24,8 @@ function App() {
   useEffect(()=>{
     (
     async ()=>{
-      const response = await fetch('/author', {
+      if(formAuth.email!=''){
+        const response = await fetch('/author', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,7 +35,7 @@ function App() {
       const res = await response.json() 
       console.log(res)
       setUser(res)
-      
+      }
     }
     )()
   }, [formAuth])
@@ -35,18 +43,32 @@ function App() {
   return (
 
     <>
+    
+    <BrowserRouter>
 {!user&&(
-   <div>
+  <div>
+          <Switch>
+            <Route path='/' exact>
         <form className="authForm" action="" onSubmit={handleChange}>
           <input name="email" type="text" placeholder="email"/>
         <input name="password" type="password" placeholder="password"/>
-        <button type="submit">Войти</button></form>
-        
+        <button type="submit">Sign In</button>
+        </form>
+        <Link to='/registration' exact>registration</Link>
+            </Route>
+        <Route path='/registration' exact>
+        <Registration />
+        <Link to='/' exact>Home</Link>
+        </Route>
+        </Switch>
       </div>
+
+
 )}
+</BrowserRouter>
      
    {user&&(
-      <div className="App">
+     <div className="App">
       <h1>Let`s talk</h1>
       {/* <TalkPerson /> */}
       <MapContainer />

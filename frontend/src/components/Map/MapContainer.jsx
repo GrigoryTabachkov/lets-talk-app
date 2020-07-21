@@ -39,13 +39,14 @@ const MapContainer = () => {
         defaultCenter={defaultMapState.center}
         defaultZoom={defaultMapState.zoom}
       >
+        
         {
           stateEl.map((el) => {
-            console.log(el.latitude)
+            console.log('el.latitude', el)
             return <TalkPerson
               lat={el.latitude}
               lng={el.longitude}
-              text="{el.userId}"
+              text={el.userId}
             />
           }
             

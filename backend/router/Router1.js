@@ -23,9 +23,9 @@ console.log('REGSESSION', req.session.authUser)
   res.json({user})
 })
 router.post('/info', async (req, res) => {
-  console.log('INFO', req.body);
+  console.log('INFO', req.body.userData.userName);
   try{
-const user = await User.reg( req.body.UserName, req.body.email, req.body.password, req.body.interests);
+const user = await User.reg( req.body.userData.userName, req.body.userData.email, req.body.userData.password, req.body.userData.interests);
   // user.password = req.body.password;
   // user.email = req.body.email;
   // user.interests = req.body.interests;
@@ -44,7 +44,7 @@ const user = await User.reg( req.body.UserName, req.body.email, req.body.passwor
 router.post('/coordinat', async (req, res) => {
   console.log('coordinat', req.body.lat);
   const locations = await Location.findOne({user: req.session.authUser});
-  if(locations){
+  if(locations&&req.body.lat){
     locations.lat = req.body.lat
     locations.lng = req.body.lng
     locations.save()
