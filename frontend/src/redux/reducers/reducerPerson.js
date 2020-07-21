@@ -1,20 +1,22 @@
-import { ADD_TOPIC, CHANGE_TOPIC, DELETE_TOPIC } from '../actions/action-types';
+import { WATCH_USER_POSITION } from '../actions/action-types';
+// case STOP_WATCH_USER_POSITION: => const watch = false;
 
-const initialState = {
-  userName: 'adgs',
-};
+const initialState = {};
 
-export default (state = initialState, action) => {
+const reducerPeron = (state = initialState, action) => {
+  console.log('ACTION', action)
   switch (action.type) {
-    case ADD_TOPIC:
-      return { ...state, userName: action.payload };
-    case CHANGE_TOPIC:
-      return { ...state, title: action.payload };
-    case DELETE_TOPIC:
-      return { ...state, title: action.payload };
+    case WATCH_USER_POSITION:
+      return [
+        ...state, {
+          userId: action.payload.usersLocation[0].user,
+          latitude: action.payload.usersLocation[0].lat,
+          longitude: action.payload.usersLocation[0].lng,
+        },
+      ];
     default:
       return state;
   }
 };
 
-// export default reducerPeron;
+export default reducerPeron;
