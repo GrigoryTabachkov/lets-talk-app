@@ -6,10 +6,12 @@ export const watchUserPosition = (payload) => ({
 }
 );
 export const toSendCoordinat = (payload) => async (dispatch) => {
-  const response = await fetch('/coordinat', {
+  console.log(payload)
+  if(payload.latitude!=''){
+    const response = await fetch('/coordinat', {
     method: 'POST',
-    header: {
-      "Content-Type": 'application/json;charset=utf-8'
+    headers: {
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       lat: payload.latitude,
@@ -18,27 +20,11 @@ export const toSendCoordinat = (payload) => async (dispatch) => {
     )
   })
   const res = await response.json();
-  console.log(res)
-  dispatch(watchUserPosition(res));
+  console.log('RESSSSSS', res)
+  
+    dispatch(watchUserPosition(res));
+  
+  }
+  
 }
-//
-// export const changeTopic = (payload = 'change topic') => ({
-//   payload,
-//   type: CHANGE_TOPIC,
-// }
-// );
-//
-// export const deleteTopic = (payload = 'delete topic') => ({
-//   payload,
-//   type: DELETE_TOPIC,
-// });
-//
-// const url = 'http://localhost:3001/'; // database
-//
-// export const loadTopic = () => async (dispatch) => {
-//   const response = await fetch(url);
-//   const result = await response.json();
-//   console.log(result);
-//
-//   dispatch(addTopic(result));
-// };
+

@@ -6,12 +6,14 @@ import reducerPeron from './reducers/reducerPerson';
 
 const middleware = [thunk];
 
-const preloadedState = [{
-  userId: '',
-  userName: '',
-  latitude: Number,
-  longitude: Number,
-}];
+const preloadedState = [
+//   {
+//   userId: '',
+//   userName: '',
+//   latitude: Number,
+//   longitude: Number,
+// }
+];
 
 const mainStore = createStore(
   reducerPeron,

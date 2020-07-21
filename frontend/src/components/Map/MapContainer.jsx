@@ -16,7 +16,7 @@ const MapContainer = () => {
   const [defaultMapState] = useState(defaultProps);
   const stateEl = useSelector((state) => state);
   const dispatch = useDispatch();
-  console.log(stateEl);
+  console.log('STATEEL', stateEl);
 
   const watch = true;
   const {
@@ -26,9 +26,10 @@ const MapContainer = () => {
     accuracy,
     error,
   } = usePosition(watch);
+  console.log(longitude)
 
   useEffect(() => {
-    dispatch(toSendCoordinat(latitude, longitude));
+    dispatch(toSendCoordinat({latitude, longitude}));
   }, [dispatch, latitude, longitude]);
   return (
   // Important! Always set the container height explicitly
@@ -38,14 +39,18 @@ const MapContainer = () => {
         defaultCenter={defaultMapState.center}
         defaultZoom={defaultMapState.zoom}
       >
+        
         {
-          stateEl.forEach((el) => (
-            <TalkPerson
+          stateEl.map((el) => {
+            console.log('el.latitude', el)
+            return <TalkPerson
               lat={el.latitude}
               lng={el.longitude}
-              userName={el.userId}
+              text={el.userId}
             />
-          ))
+          }
+            
+          )
         }
 
       </GoogleMapReact>

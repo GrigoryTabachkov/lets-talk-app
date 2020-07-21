@@ -4,14 +4,11 @@ import { WATCH_USER_POSITION } from '../actions/action-types';
 const initialState = {};
 
 const reducerPeron = (state = initialState, action) => {
+  console.log('ACTION', action)
   switch (action.type) {
     case WATCH_USER_POSITION:
       return [
-        ...state, {
-          userId: action.payload.user,
-          latitude: action.payload.latitude,
-          longitude: action.payload.longitude,
-        },
+        ...action.payload.usersLocation
       ];
     default:
       return state;
