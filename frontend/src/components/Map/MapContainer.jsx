@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePosition } from 'use-position';
-import GoogleMapReact from 'google-map-react';
+import {
+  GoogleMap, LoadScript, Marker, Circle,
+} from '@react-google-maps/api';
 import { toSendCoordinat } from '../../redux/actions/actions';
 import TalkPerson from '../TalkPerson/TalkPerson.jsx';
 
 const MapContainer = () => {
-  const defaultProps = {
-    center: {
-      lat: 59.95,
-      lng: 30.33,
-    },
-    zoom: 11,
+  const containerStyle = {
+    width: '400px',
+    height: '400px',
   };
-  const [defaultMapState] = useState(defaultProps);
+
   const stateEl = useSelector((state) => state);
   const dispatch = useDispatch();
   console.log('STATEEL', stateEl);
@@ -25,36 +24,85 @@ const MapContainer = () => {
     timestamp,
     accuracy,
     error,
-  } = usePosition(watch);
-  console.log(longitude)
+  } = usePosition(watch, { enableHighAccuracy: true });
+
+  const position = {
+    lat: latitude,
+    lng: longitude,
+  };
+  console.log(position.lat, position.lng, accuracy);
+
+  const options = {
+    strokeColor: '#5E81AC',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#88C0D0',
+    fillOpacity: 0.2,
+    clickable: true,
+    draggable: false,
+    editable: false,
+    visible: true,
+    radius: 50,
+    zIndex: 1,
+  };
+
+  const [map, setMap] = useState(null);
+
+  const onLoad = useCallback((map) => {
+    const bounds = new window.google.maps.LatLngBounds();
+    map.fitBounds(bounds);
+    setMap(map);
+  }, []);
+
+  const onUnmount = React.useCallback((map) => {
+    setMap(null);
+  }, []);
 
   useEffect(() => {
-    dispatch(toSendCoordinat({latitude, longitude}));
+    dispatch(toSendCoordinat({ latitude, longitude }));
   }, [dispatch, latitude, longitude]);
+
   return (
-  // Important! Always set the container height explicitly
-    <div style={{ margin: '10px', height: '400px', width: '400px' }}>
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: 'AIzaSyDZEnptJhEhjeXm-meAeEJJx3TkvTdO3yo' }}
-        defaultCenter={defaultMapState.center}
-        defaultZoom={defaultMapState.zoom}
+    <LoadScript
+      googleMapsApiKey="AIzaSyDZEnptJhEhjeXm-meAeEJJx3TkvTdO3yo"
+    >
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={position}
+        zoom={10}
+        onLoad={onLoad}
+        onUnmount={onUnmount}
       >
-        
+
+        <Marker
+          position={position}
+        >
+          <Circle
+            radius={100}
+            center={position}
+            options={options}
+            // onClick={} >>> onClickHandler
+            // onMouseOver={} >>> mouseOverHandler
+          />
+        </Marker>
+
         {
           stateEl.map((el) => {
-            console.log('el.latitude', el)
-            return <TalkPerson
-              lat={el.latitude}
-              lng={el.longitude}
-              text={el.userId}
-            />
-          }
-            
-          )
+            console.log('el.latitude', el);
+            return (
+              <TalkPerson
+                lat={el.latitude}
+                lng={el.longitude}
+                text={el.userId}
+              />
+            );
+          })
         }
 
-      </GoogleMapReact>
-    </div>
+        { /* Child components, such as markers, info windows, etc. */ }
+
+      </GoogleMap>
+    </LoadScript>
   );
 };
 
