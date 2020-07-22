@@ -13,9 +13,12 @@ export default function UserList({ list }) {
 
     <div style={styles.div}>
       {
-        list.map((el) => <UserInfo
-          key={Math.floor(Math.random() * 1000)}
-          data={el} />)
+        list.map((el) => (
+          <UserInfo
+            key={Math.floor(Math.random() * 1000)}
+            data={el}
+          />
+        ))
         }
     </div>
 

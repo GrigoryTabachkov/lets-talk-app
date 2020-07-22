@@ -14,7 +14,7 @@ ws.on('connection', (client) => {
     console.log(data);
     const dataReq = JSON.parse(data);
     console.log('mes', dataReq.data);
-    if (dataReq.type == 'exit') {
+    if (dataReq.type === 'exit') {
       // clients.splice(clients.indexOf(client));
       await Location.deleteOne({ user: dataReq.data });
       const user = await User.findById(dataReq.data);

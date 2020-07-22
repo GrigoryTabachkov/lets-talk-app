@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePosition } from 'use-position';
 import {
-  GoogleMap, LoadScript, Marker, Circle,
+  GoogleMap, LoadScript, Marker, Circle, InfoBox,
 } from '@react-google-maps/api';
 import { toSendCoordinat } from '../../redux/actions/actions';
 
 const containerStyle = {
-  width: '400px',
-  height: '400px',
+  width: '50vw',
+  height: '50vh',
 };
 
 const center = {
@@ -32,17 +32,18 @@ const options = {
 };
 
 function MapContainer() {
-  // console.log('GEOLOCATED', geolocated.props.coords )
-  const [map, setMap] = React.useState(null);
 
   const watch = true;
   const {
     latitude,
     longitude,
-    timestamp,
     accuracy,
-    error,
-  } = usePosition(watch, { enableHighAccuracy: true });
+  } = usePosition(watch, {
+    maximumAge: 10000,
+    timeout: 5000,
+    enableHighAccuracy: true,
+  });
+  console.log('Accuracy: ', accuracy);
 
   const dispatch = useDispatch();
 
@@ -52,8 +53,11 @@ function MapContainer() {
     }, 1000);
   }, [dispatch, latitude, longitude]);
 
-  const stateEl = useSelector((state) => state.locations);
+  const stateEl = useSelector((state) => state.locations); // locations
+  // const userInformation = useSelector((state) => state.users);
+
   console.log('STATEEL', stateEl);
+  // console.log('USERNAME:', userInformation.userName);
 
   const [stateMap, setStateMap] = useState([]);
 
@@ -61,17 +65,14 @@ function MapContainer() {
     setStateMap(stateEl);
   }, [stateEl]);
 
-  console.log('stateMap', stateMap);
+  // const [map, setMap] = React.useState(null);
+  // const onLoad = useCallback((map) => {
+  //   const bounds = new window.google.maps.LatLngBounds();
+  //   map.fitBounds(bounds);
+  //   setMap(map);
+  // }, []);
 
-  const onLoad = React.useCallback((map) => {
-    const bounds = new window.google.maps.LatLngBounds();
-    map.fitBounds(bounds);
-    setMap(map);
-  }, []);
-
-  const onUnmount = React.useCallback((map) => {
-    setMap(null);
-  }, []);
+  const infoBoxOptions = { closeBoxURL: '', enableEventPropagation: true };
 
   return (
     <LoadScript
@@ -79,6 +80,7 @@ function MapContainer() {
     >
       <div id="map">
         <GoogleMap
+          // onLoad={onLoad}
           mapContainerStyle={containerStyle}
           center={center}
           zoom={11}
@@ -88,7 +90,7 @@ function MapContainer() {
           stateMap.map((el) => (
             <Marker
               text={el.user}
-              key={el.user + Math.floor(Math.random() * 1000)}
+              key={el.user + Math.floor(Math.random() * 10000)}
               position={{ lat: Number(el.lat), lng: Number(el.lng) }}
             >
               <Circle
@@ -96,10 +98,20 @@ function MapContainer() {
                 center={{ lat: Number(el.lat), lng: Number(el.lng) }}
                 options={options}
               />
+              <InfoBox
+                options={infoBoxOptions}
+                position={{ lat: Number(el.lat), lng: Number(el.lng) }}
+              >
+                <div style={{ backgroundColor: 'green', opacity: 0.55, padding: 12 }}>
+                  <div style={{ fontSize: 12, fontColor: '#08233B' }}>
+                    Имя:
+                    {el.accuracy}
+                  </div>
+                </div>
+              </InfoBox>
             </Marker>
           ))
         }
-
         </GoogleMap>
       </div>
     </LoadScript>
