@@ -10,10 +10,7 @@ const reducerPeron = (state = initialState, action) => {
       return {
         ...state, users: [...action.payload.users], locations: [...action.payload.usersLocation]
       }
-      // {
-      //   users: [...action.payload.arr],
-      //   locations: [...action.payload.usersLocation],
-      // }
+      
       // [
       //   ...action.payload.usersLocation
       // ];

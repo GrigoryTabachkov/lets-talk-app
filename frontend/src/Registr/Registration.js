@@ -39,7 +39,7 @@ console.log('q1q1q1q1', form01)
       (
         async ()=>{
           if(userData.userName!==''){
-            const response = await fetch('/info', {
+            const response = await fetch('/registration', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
