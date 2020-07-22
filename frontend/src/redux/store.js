@@ -7,11 +7,9 @@ import reducerPeron from './reducers/reducerPerson';
 const middleware = [thunk];
 
 const preloadedState = {
-users: [],
-locations: []
-}
- 
-
+  users: [],
+  locations: [],
+};
 
 const mainStore = createStore(
   reducerPeron,
