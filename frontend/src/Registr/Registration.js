@@ -28,7 +28,7 @@ console.log('q1q1q1q1', form01)
       userName: e.target.userName.value,
       password: e.target.password.value,
       email: e.target.email.value,
-      interests: e.target.interests.value,
+      interests: [e.target.interests1.value, e.target.interests2.value, e.target.interests3.value],
     })
     }
     
@@ -39,7 +39,7 @@ console.log('q1q1q1q1', form01)
       (
         async ()=>{
           if(userData.userName!==''){
-            const response = await fetch('/info', {
+            const response = await fetch('/registration', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -63,13 +63,25 @@ console.log('q1q1q1q1', form01)
       <form className="formName" action="" style={styles.form} onSubmit={toPutData}>
       <input type="text" name="userName" placeholder="name"/>
       <input type="password" name="password" placeholder="password"/>
-      <select multiple name="interests" id="">
+      <input type="email" name="email" placeholder="email"/>
+      <select multiple name="interests1" id="">
       <option value="Cars">Cars</option>
       <option value="Books">Books</option>
       <option value="Techoligy">Techoligy</option>
       <option value="IT">IT</option>
       </select>
-      <input type="email" name="email" placeholder="email"/>
+      <select multiple name="interests2" id="">
+      <option value="Cars">Cars</option>
+      <option value="Books">Books</option>
+      <option value="Techoligy">Techoligy</option>
+      <option value="IT">IT</option>
+      </select>
+      <select multiple name="interests3" id="">
+      <option value="Cars">Cars</option>
+      <option value="Books">Books</option>
+      <option value="Techoligy">Techoligy</option>
+      <option value="IT">IT</option>
+      </select>
       <button>create accaunt</button>
       </form>
    
