@@ -37,27 +37,20 @@ const user = await User.reg( req.body.userData.userName, req.body.userData.email
 
 router.post('/coordinat', async (req, res) => {
   console.log('coordinat', req.body.lat);
-  const locations = await Location.findOne({user: req.session.authUser._id});
+  const locations = await Location.findOne({user: req.session.authUser});
+  console.log('locations', locations)
+  console.log('authUser', req.session.authUser._id)
   if(locations&&req.body.lat){
     locations.lat = req.body.lat
     locations.lng = req.body.lng
-     await locations.save()
+    locations.save()
     const usersLocation = await Location.find();
     let usersAll = await User.find()
     let users = usersAll.filter((el)=>el._id!=req.session.authUser._id)
-  // for(i=0; i<usersLocation.length; i++){
-  //   if(usersLocation[i].user!=req.session.authUser._id){
-  //     let user = await User.findById(usersLocation[i].user)
-  //     arr.push(user)
-
-  //   }
-
-  // }
-  console.log('ARRBACK', users)
-
+  
   res.json({ usersLocation, users });
   // res.json({ usersLocation });
-  } else if(req.body.lat){
+  } else if(req.body.lat) {
     const location = await Location.create({
     lat: req.body.lat,
     lng: req.body.lng,
@@ -74,7 +67,7 @@ router.post('/coordinat', async (req, res) => {
   let arr = []
   let usersAll = await User.find()
     let users = usersAll.filter((el)=>el._id!=req.session.authUser._id)
-  console.log('ARRBACK', users)
+  // console.log('ARRBACK', users)
 
   res.json({ usersLocation, users });
   }
