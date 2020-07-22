@@ -102,17 +102,17 @@ function App() {
 {!user&&(
   <div>
           <Switch>
-            <Route path='/' exact>
+            <Route exact path='/' >
         <form className="authForm" action="" onSubmit={handleChange}>
           <input name="email" type="text" placeholder="email"/>
         <input name="password" type="password" placeholder="password"/>
         <button type="submit">Sign In</button>
         </form>
-        <Link to='/registration' exact>registration</Link>
+        <Link to='/registration' >registration</Link>
             </Route>
-        <Route path='/registration' exact>
+        <Route exact path='/registration' >
         <Registration />
-        <Link to='/' exact>Home</Link>
+        <Link to='/'>Home</Link>
         </Route>
         </Switch>
       </div>
@@ -125,7 +125,9 @@ function App() {
      <div className="App">
       <h1>Let`s talk</h1>
       <div style={styles.div}>
-        <UserList list={arr} />
+        <UserList
+          key={Math.floor(Math.random() * 1000)}
+          list={arr} />
       <MapContainer />
       </div>
       

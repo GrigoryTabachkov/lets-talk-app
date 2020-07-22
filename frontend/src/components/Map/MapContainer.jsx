@@ -6,35 +6,35 @@ import {
 } from '@react-google-maps/api';
 import { toSendCoordinat } from '../../redux/actions/actions';
 
- 
 const containerStyle = {
   width: '400px',
-  height: '400px'
+  height: '400px',
 };
- 
+
 const center = {
   lat: 59.9386300,
   lng: 30.3141300,
 };
- 
-function MapContainer({data}) {
+
+const options = {
+  strokeColor: '#5E81AC',
+  strokeOpacity: 0.8,
+  strokeWeight: 2,
+  fillColor: '#88C0D0',
+  fillOpacity: 0.1,
+  clickable: true,
+  draggable: false,
+  editable: false,
+  visible: true,
+  radius: 50,
+  // mapTypeControl: false,
+  // navigationControl: false,
+};
+
+function MapContainer() {
   // console.log('GEOLOCATED', geolocated.props.coords )
-  const [map, setMap] = React.useState(null)
-  const [ currentPosition, setCurrentPosition ] = useState({});
-  
-  const success = position => {
-    const currentPosition = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    }
-    setCurrentPosition(currentPosition);
-  };
-  
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(success);
-  })
-  console.log('CURRENT_POSITION', currentPosition.lat)
-  
+  const [map, setMap] = React.useState(null);
+
   const watch = true;
   const {
     latitude,
@@ -43,58 +43,67 @@ function MapContainer({data}) {
     accuracy,
     error,
   } = usePosition(watch, { enableHighAccuracy: true });
-  
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    dispatch(toSendCoordinat({lat: latitude, lng: longitude}));
 
-  }, [dispatch, latitude]);
-  
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setInterval(() => {
+      dispatch(toSendCoordinat({ lat: latitude, lng: longitude }));
+    }, 1000);
+  }, [dispatch, latitude, longitude]);
+
   const stateEl = useSelector((state) => state.locations);
   console.log('STATEEL', stateEl);
-  const [stateMap, setStateMap] = useState([])
-  useEffect(()=>{
-    setStateMap(stateEl)
-  }, [stateEl])
-  console.log('stateMap', stateMap)
-  const onLoad = React.useCallback(function callback(map) {
+
+  const [stateMap, setStateMap] = useState([]);
+
+  useEffect(() => {
+    setStateMap(stateEl);
+  }, [stateEl]);
+
+  console.log('stateMap', stateMap);
+
+  const onLoad = React.useCallback((map) => {
     const bounds = new window.google.maps.LatLngBounds();
     map.fitBounds(bounds);
-    setMap(map)
-  }, [])
- 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null)
-  }, [])
- 
+    setMap(map);
+  }, []);
 
+  const onUnmount = React.useCallback((map) => {
+    setMap(null);
+  }, []);
 
   return (
     <LoadScript
       googleMapsApiKey="AIzaSyDZEnptJhEhjeXm-meAeEJJx3TkvTdO3yo"
     >
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={11}
-        // onLoad={onLoad}
-        // onUnmount={onUnmount}
-      >
-        { /* Child components, such as markers, info windows, etc. */ }
-        <>
-        {
-          stateMap.map((el) => {
-          return  (<Marker text={el.user} key={el.user} position={{lat: Number(el.lat), lng: Number(el.lng)}}
-              />)}
-          )
+      <div id="map">
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={center}
+          zoom={11}
+        >
+          { /* Child components, such as markers, info windows, etc. */ }
+          {
+          stateMap.map((el) => (
+            <Marker
+              text={el.user}
+              key={el.user + Math.floor(Math.random() * 1000)}
+              position={{ lat: Number(el.lat), lng: Number(el.lng) }}
+            >
+              <Circle
+                radius={100}
+                center={{ lat: Number(el.lat), lng: Number(el.lng) }}
+                options={options}
+              />
+            </Marker>
+          ))
         }
-         
-              
-        </>
-      </GoogleMap>
+
+        </GoogleMap>
+      </div>
     </LoadScript>
-  )
+  );
 }
- 
-export default React.memo(MapContainer)
+
+export default React.memo(MapContainer);
