@@ -7,8 +7,8 @@ import {
 import { toSendCoordinat } from '../../redux/actions/actions';
 
 const containerStyle = {
-  width: '400px',
-  height: '400px',
+  width: '50vw',
+  height: '50vh',
 };
 
 const center = {
@@ -32,16 +32,18 @@ const options = {
 };
 
 function MapContainer() {
-  const [map, setMap] = React.useState(null);
 
   const watch = true;
   const {
     latitude,
     longitude,
-    timestamp,
     accuracy,
-    error,
-  } = usePosition(watch, { enableHighAccuracy: true });
+  } = usePosition(watch, {
+    maximumAge: 10000,
+    timeout: 5000,
+    enableHighAccuracy: true,
+  });
+  console.log('Accuracy: ', accuracy);
 
   const dispatch = useDispatch();
 
@@ -63,19 +65,14 @@ function MapContainer() {
     setStateMap(stateEl);
   }, [stateEl]);
 
-  // useEffect(() => {
-  //   setStateMap(userInformation);
-  // }, [userInformation]);
-
-  console.log('stateMap', stateMap);
-
+  // const [map, setMap] = React.useState(null);
   // const onLoad = useCallback((map) => {
   //   const bounds = new window.google.maps.LatLngBounds();
   //   map.fitBounds(bounds);
   //   setMap(map);
   // }, []);
 
-  const infoBoxOptions = { closeBoxURL: 'https://www.instagram.com/?hl=ru', enableEventPropagation: true };
+  const infoBoxOptions = { closeBoxURL: '', enableEventPropagation: true };
 
   return (
     <LoadScript
@@ -108,7 +105,7 @@ function MapContainer() {
                 <div style={{ backgroundColor: 'green', opacity: 0.55, padding: 12 }}>
                   <div style={{ fontSize: 12, fontColor: '#08233B' }}>
                     Имя:
-                    {el.user.userName}
+                    {el.accuracy}
                   </div>
                 </div>
               </InfoBox>
