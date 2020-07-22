@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   BrowserRouter,
   Switch,
@@ -8,8 +9,16 @@ import {
 import './App.css';
 import MapContainer from './components/Map/MapContainer.jsx';
 import Registration from './Registr/Registration'
+import UserList from './components/UserList/UserLIst'
 // import TalkPerson from './components/TalkPerson/TalkPerson.jsx';
 
+const styles = {
+  div: {
+    display: 'flex',
+    flexDirection: 'row',
+
+  }
+}
 function App() {
   const [formAuth, setFormAuth] = useState({email: '', password: ''})
   const [user, setUser] = useState('')
@@ -40,6 +49,17 @@ function App() {
     )()
   }, [formAuth])
   console.log(user)
+
+  const state = useSelector(state=>state.users)
+  console.log('APP', state)
+  let arr = []
+  for(let i=0; i<state.length; i++){
+      if(state[i].location){
+        arr.push(state[i])
+      }
+    
+  }
+
   return (
 
     <>
@@ -70,8 +90,12 @@ function App() {
    {user&&(
      <div className="App">
       <h1>Let`s talk</h1>
-      {/* <TalkPerson /> */}
+      <div style={styles.div}>
+        <UserList list={arr} />
       <MapContainer />
+      </div>
+      
+
     </div>
    )}
      

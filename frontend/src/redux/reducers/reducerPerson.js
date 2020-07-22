@@ -7,9 +7,16 @@ const reducerPeron = (state = initialState, action) => {
   console.log('ACTION', action)
   switch (action.type) {
     case WATCH_USER_POSITION:
-      return [
-        ...action.payload.usersLocation
-      ];
+      return {
+        ...state, users: [...action.payload.users], locations: [...action.payload.usersLocation]
+      }
+      // {
+      //   users: [...action.payload.arr],
+      //   locations: [...action.payload.usersLocation],
+      // }
+      // [
+      //   ...action.payload.usersLocation
+      // ];
     default:
       return state;
   }

@@ -30,8 +30,8 @@ const user = await User.reg( req.body.userData.userName, req.body.userData.email
   // user.email = req.body.email;
   // user.interests = req.body.interests;
   // user.save();
-  req.session.authUser = user;
-  console.log(req.session.authUser);
+  // req.session.authUser = user;
+  // console.log(req.session.authUser);
 
   res.json({ user });
   } catch (error) {
@@ -40,6 +40,16 @@ const user = await User.reg( req.body.userData.userName, req.body.userData.email
   }
   
 });
+router.post('/usersIn', async(req, res)=>{
+console.log('UserIn', req.body)
+let arr = []
+for(i=0; i<req.body.length; i++){
+  let user = await User.findById(req.body[i])
+  arr.push(user)
+}
+console.log('ARRBACK', arr)
+res.json(arr)
+})
 
 router.post('/coordinat', async (req, res) => {
   console.log('coordinat', req.body.lat);
@@ -47,16 +57,29 @@ router.post('/coordinat', async (req, res) => {
   if(locations&&req.body.lat){
     locations.lat = req.body.lat
     locations.lng = req.body.lng
-    locations.save()
+     await locations.save()
     const usersLocation = await Location.find();
-  res.json({ usersLocation });
+    let users = await User.find()
+
+  // for(i=0; i<usersLocation.length; i++){
+  //   if(usersLocation[i].user!=req.session.authUser._id){
+  //     let user = await User.findById(usersLocation[i].user)
+  //     arr.push(user)
+
+  //   }
+
+  // }
+  console.log('ARRBACK', users)
+
+  res.json({ usersLocation, users });
+  // res.json({ usersLocation });
   } else if(req.body.lat){
     const location = await Location.create({
     lat: req.body.lat,
     lng: req.body.lng,
     user: req.session.authUser._id,
   });
-  location.save();
+  await location.save();
 
   const user = await User.findById(req.session.authUser._id);
   user.location = location._id;
@@ -64,7 +87,17 @@ router.post('/coordinat', async (req, res) => {
   req.session.authUser = user;
   // console.log(req.session.authUser);
   const usersLocation = await Location.find();
-  res.json({ usersLocation });
+  let arr = []
+  for(i=0; i<usersLocation.length; i++){
+    if(usersLocation[i].user!=req.session.authUser._id){
+      let user = await User.findById(usersLocation[i].user)
+      arr.push(user)
+
+    }
+  }
+  console.log('ARRBACK', arr)
+
+  res.json({ usersLocation, arr });
   }
 
   
