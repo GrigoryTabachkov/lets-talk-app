@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   BrowserRouter,
@@ -10,6 +10,8 @@ import './App.css';
 import MapContainer from './components/Map/MapContainer.jsx';
 import Registration from './Registr/Registration'
 import UserList from './components/UserList/UserLIst'
+import { toSendCoordinat } from './redux/actions/actions';
+// import Context from
 // import TalkPerson from './components/TalkPerson/TalkPerson.jsx';
 
 const styles = {
@@ -50,6 +52,37 @@ function App() {
   }, [formAuth])
   console.log(user)
 
+  // const [ currentPosition, setCurrentPosition ] = useState({});
+  
+  // const success = position => {
+  //   const currentPosition = {
+  //     lat: position.coords.latitude,
+  //     lng: position.coords.longitude
+  //   }
+  //   setCurrentPosition(currentPosition);
+  // };
+  
+  // useEffect(() => {
+  //   navigator.geolocation.getCurrentPosition(success);
+  // })
+  // console.log('CURRENT_POSITION', currentPosition.lat)
+  
+  // // const watch = true;
+  // // const {
+  // //   latitude,
+  // //   longitude,
+  // //   timestamp,
+  // //   accuracy,
+  // //   error,
+  // // } = usePosition(watch, { enableHighAccuracy: true });
+  
+  // const dispatch = useDispatch();
+  
+  // useEffect(() => {
+  //   dispatch(toSendCoordinat(currentPosition));
+
+  // }, [dispatch, currentPosition]);
+
   const state = useSelector(state=>state.users)
   console.log('APP', state)
   let arr = []
@@ -59,6 +92,7 @@ function App() {
       }
     
   }
+
 
   return (
 
