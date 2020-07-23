@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toChangeStore } from '../../redux/actions/actions';
 import Context from '../../context/Context';
 
+// const i = 50;
 const styles = {
   div: {
     width: 250,
@@ -17,6 +18,7 @@ const styles = {
   },
   span : {
     margin: 5,
+    // order: --i,
   }
 
 };
@@ -36,7 +38,7 @@ export default function Chart({ user }) {
     console.log('connect');
   };
   W1.onmessage = function (data) {
-    console.log('Message', JSON.parse(data.data));
+    console.log('Message!!!!', JSON.parse(data.data));
 
     const dataParse = JSON.parse(data.data);
     const rightMess = dataParse.charts.filter((el)=>{
@@ -51,6 +53,30 @@ export default function Chart({ user }) {
   W1.onclose = function (data){
     console.log('connectionClose')
   }
+  //------------------
+  const W2 = new WebSocket('ws://localhost:9000');
+  W2.onopen = function () {
+    console.log('connectW2');
+  };
+  W2.onmessage = function (data) {
+    console.log('MessageW2!!', JSON.parse(data.data));
+
+    const dataParse = JSON.parse(data.data);
+    console.log('dataParse!!!!', dataParse)
+    // const rightMess = dataParse.charts.filter((el)=>{
+    //   if(el.userId1==user.user._id||el.userId2==user.user._id){
+    //     return el
+    //   }}
+    // )
+    // setMessage(rightMess);
+    setUsers(dataParse.users)
+    setLocations(dataParse.locations)
+
+  };
+  W2.onclose = function (data){
+    console.log('connectionCloseW2')
+  }
+  //------------------
   
   useEffect(()=>{
     
@@ -60,7 +86,7 @@ export default function Chart({ user }) {
   function handleClick(e) {
     e.preventDefault();
     console.log('ClickChart', e.target.myMes.value);
-
+    W2.send(user.user._id)
     W1.send(JSON.stringify({ text: e.target.myMes.value, userName: user.user.userName, userId1: user.user._id, userId2: userChoose }));
     e.target.myMes.value = '';
   }
