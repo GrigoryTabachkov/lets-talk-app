@@ -8,12 +8,22 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     border: 'solid black 1px',
-    margin: 5
+    margin: 5,
+    // backgroundColor: 'green',
+  },
+  divSelect: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    border: 'solid black 1px',
+    margin: 5,
+    backgroundColor: 'aqua',
   }
+
 }
 export default function Userinfo({data}){
 
-const {setStateMap, setUserChoose} = useContext(Context)
+const {setStateMap, setUserChoose, userChoose} = useContext(Context)
 const state = useSelector((state)=>state)
 const obj = {}
 
@@ -25,8 +35,12 @@ state.locations.map(el=>{
   }
 })
 
+let stylesVariant = styles.div
+if(userChoose==data._id){
+  stylesVariant = styles.divSelect
+}
   return(
-    <div style={styles.div} onClick={()=>{
+    <div style={stylesVariant} onClick={()=>{
       setStateMap([{lat: obj.lat, lng: obj.lng, id: data._id}])
       setUserChoose(data._id)
       }}>

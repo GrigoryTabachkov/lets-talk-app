@@ -64,7 +64,7 @@ export default function Chart({ user }) {
     W1.send(JSON.stringify({ text: e.target.myMes.value, userName: user.user.userName, userId1: user.user._id, userId2: userChoose }));
     e.target.myMes.value = '';
   }
-
+  
   return (
     <>
     <form id="chartForm" action="" onSubmit={handleClick}>

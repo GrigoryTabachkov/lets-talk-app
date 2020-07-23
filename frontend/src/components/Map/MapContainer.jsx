@@ -82,7 +82,10 @@ function MapContainer({ data }) {
       setStateMap,
     }}>
       <div>
-      <button onClick={() => { setStateMap(stateEl); }}>Full list</button>
+      <button onClick={() => { 
+        setStateMap(stateEl); 
+        setUserChoose('')
+        }}>Full list</button>
     <UserList list={stateUsers} />
     <Chart user={data}/>
       </div>
