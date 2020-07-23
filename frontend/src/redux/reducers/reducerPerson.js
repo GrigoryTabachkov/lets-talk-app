@@ -1,5 +1,5 @@
-import { WATCH_USER_POSITION } from '../actions/action-types';
-// case STOP_WATCH_USER_POSITION: => const watch = false;
+import { WATCH_USER_POSITION, CHANGE_STORE_WS } from '../actions/action-types';
+
 
 const initialState = {};
 
@@ -10,10 +10,11 @@ const reducerPeron = (state = initialState, action) => {
       return {
         ...state, users: [...action.payload.users], locations: [...action.payload.usersLocation]
       }
+      case CHANGE_STORE_WS:
+        return {
+          ...state, users: [...action.payload.users], locations: [...action.payload.locations]
+        }
       
-      // [
-      //   ...action.payload.usersLocation
-      // ];
     default:
       return state;
   }

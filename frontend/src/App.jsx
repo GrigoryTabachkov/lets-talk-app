@@ -9,10 +9,10 @@ import {
 import './App.css';
 import MapContainer from './components/Map/MapContainer.jsx';
 import Registration from './Registr/Registration'
-import UserList from './components/UserList/UserLIst'
+// import UserList from './components/UserList/UserLIst'
 import { toSendCoordinat } from './redux/actions/actions';
-// import Context from
-// import TalkPerson from './components/TalkPerson/TalkPerson.jsx';
+
+
 
 const styles = {
   div: {
@@ -50,38 +50,7 @@ function App() {
     }
     )()
   }, [formAuth])
-  console.log(user)
-
-  // const [ currentPosition, setCurrentPosition ] = useState({});
-  
-  // const success = position => {
-  //   const currentPosition = {
-  //     lat: position.coords.latitude,
-  //     lng: position.coords.longitude
-  //   }
-  //   setCurrentPosition(currentPosition);
-  // };
-  
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition(success);
-  // })
-  // console.log('CURRENT_POSITION', currentPosition.lat)
-  
-  // // const watch = true;
-  // // const {
-  // //   latitude,
-  // //   longitude,
-  // //   timestamp,
-  // //   accuracy,
-  // //   error,
-  // // } = usePosition(watch, { enableHighAccuracy: true });
-  
-  // const dispatch = useDispatch();
-  
-  // useEffect(() => {
-  //   dispatch(toSendCoordinat(currentPosition));
-
-  // }, [dispatch, currentPosition]);
+  console.log('YOU', user)
 
   const state = useSelector(state=>state.users)
   console.log('APP', state)
@@ -125,8 +94,8 @@ function App() {
      <div className="App">
       <h1>Let`s talk</h1>
       <div style={styles.div}>
-        <UserList list={arr} />
-      <MapContainer />
+        {/* <UserList list={arr} /> */}
+      <MapContainer data={user}/>
       </div>
       
 

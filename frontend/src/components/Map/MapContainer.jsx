@@ -1,12 +1,15 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, {
+  useState, useEffect, useCallback, useContext,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePosition } from 'use-position';
 import {
   GoogleMap, LoadScript, Marker, Circle,
 } from '@react-google-maps/api';
 import { toSendCoordinat } from '../../redux/actions/actions';
-import UserList from '../UserList/UserLIst'
-import Context from '../../context/Context'
+import UserList from '../UserList/UserLIst';
+import Context from '../../context/Context';
+import Chart from '../Chart/Chart';
 
 const containerStyle = {
   width: '400px',
@@ -52,10 +55,11 @@ function MapContainer({ data }) {
   }, [latitude]);
 
   const state = useSelector((state) => state);
-  let stateEl = state.locations
-  let stateUsers = state.users
+  const stateEl = state.locations;
+  const stateUsers = state.users;
   console.log('STATEEL', state);
   const [stateMap, setStateMap] = useState([]);
+  const [userChoose, setUserChoose] = useState('');
   useEffect(() => {
     setStateMap(stateEl);
   }, [stateEl]);
@@ -73,11 +77,14 @@ function MapContainer({ data }) {
   return (
     <>
     <Context.Provider value={{
+      userChoose,
+      setUserChoose,
       setStateMap,
     }}>
       <div>
-      <button onClick={()=>{setStateMap(stateEl)}}>Full list</button>
+      <button onClick={() => { setStateMap(stateEl); }}>Full list</button>
     <UserList list={stateUsers} />
+    <Chart user={data}/>
       </div>
     <LoadScript
       googleMapsApiKey="AIzaSyDZEnptJhEhjeXm-meAeEJJx3TkvTdO3yo"
@@ -92,7 +99,7 @@ function MapContainer({ data }) {
         { /* Child components, such as markers, info windows, etc. */ }
         <>
         {
-          stateMap.map((el) => (<Marker  key={el.user} position={{ lat: Number(el.lat), lng: Number(el.lng) }}
+          stateMap.map((el) => (<Marker key={el.user} position={{ lat: Number(el.lat), lng: Number(el.lng) }}
           />))
         }
 

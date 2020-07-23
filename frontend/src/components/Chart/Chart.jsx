@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toChangeStore } from '../../redux/actions/actions';
+import Context from '../../context/Context';
 
 const styles = {
   div: {
@@ -22,26 +23,45 @@ const styles = {
 
 export default function Chart({ user }) {
   const [message, setMessage] = useState([]);
+  const {userChoose} = useContext(Context)
+  console.log('userChoose', userChoose)
+  const state = useSelector((state)=>state)
+  const [users, setUsers] = useState(state.users)
+  const [locations, setLocations] = useState(state.locations)
+
   console.log('ChartUser', user.user._id);
   const dispatch = useDispatch();
-  const W1 = new WebSocket('ws://localhost:8080');
-  W1.onopen = function (data) {
+  const W1 = new WebSocket('ws://localhost:8090');
+  W1.onopen = function () {
     console.log('connect');
   };
   W1.onmessage = function (data) {
     console.log('Message', JSON.parse(data.data));
 
     const dataParse = JSON.parse(data.data);
-
-    setMessage(dataParse.charts);
-    dispatch(toChangeStore(dataParse));
+    const rightMess = dataParse.charts.filter((el)=>{
+      if(el.userId1==user.user._id||el.userId2==user.user._id){
+        return el
+      }}
+    )
+    setMessage(rightMess);
+    // setUsers(dataParse.users)
+    // setLocations(dataParse.locations)
   };
+  W1.onclose = function (data){
+    console.log('connectionClose')
+  }
+  
+  useEffect(()=>{
+    
+    dispatch(toChangeStore({users: users, locations: locations}));
+  }, [locations, users])
 
   function handleClick(e) {
     e.preventDefault();
     console.log('ClickChart', e.target.myMes.value);
 
-    W1.send(JSON.stringify({ text: e.target.myMes.value, user: user.user.userName }));
+    W1.send(JSON.stringify({ text: e.target.myMes.value, userName: user.user.userName, userId1: user.user._id, userId2: userChoose }));
     e.target.myMes.value = '';
   }
 
@@ -53,7 +73,7 @@ export default function Chart({ user }) {
     </form>
     <div className="chartBody" style={styles.div}>
       {
-      message.map((el) => <span style={styles.span}>{el.userId1}: {el.text}</span>)
+      message.map((el) => <span style={styles.span}>{el.userName}: {el.text}</span>)
     }
     </div>
     </>
