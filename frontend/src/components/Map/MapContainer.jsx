@@ -11,8 +11,8 @@ import Chart from '../Chart/Chart.jsx';
 import Button from '@material-ui/core/Button';
 
 const containerStyle = {
-  width: '55vw',
-  height: '55vh',
+  width: '60vw',
+  height: '60vh',
   borderRadius: '10px',
   boxShadow: '',
 };

@@ -17,6 +17,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import { Favorite, FavoriteBorder } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
+import zIndex from '@material-ui/core/styles/zIndex';
 
 function Copyright() {
   return (
@@ -36,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     alignItems: 'center',
+    zIndex: 3,
   },
   paper: {
     marginTop: theme.spacing(8),
@@ -158,7 +160,15 @@ export default function Reg() {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <div
+        className={classes.paper}
+        style={{
+          zIndex: 2,
+          padding: 25,
+          background: '#ECEFF4',
+          borderRadius: 10,
+        }}
+      >
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>

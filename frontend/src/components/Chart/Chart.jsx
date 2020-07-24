@@ -20,14 +20,14 @@ const styles = {
     margin: 5,
     fontSize: '24px',
     fontWeight: 'bold',
-    fontColor: 'white',
+    fontColor: '#E5E9F0',
 
   },
   span: {
     margin: 5,
     fontSize: '24px',
     fontWeight: 'bold',
-    fontColor: 'red',
+    fontColor: '#E5E9F0',
   },
 };
 
