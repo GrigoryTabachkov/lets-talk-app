@@ -29,43 +29,35 @@ router.post('/registration', async (req, res) => {
 
     res.json({ user });
   } catch (error) {
-    res.send('user already exist');
+    return res.send('user already exist');
   }
 });
-//---
-router.post('/', async (req, res) => {
-  console.log('INFO', req.body.userData.userName);
-  try {
-    const user = await User.findOne(req.body.userData.userName);
 
-    res.json({ user });
-  } catch (error) {
-    res.send('user not found');
-  }
-});
-//---
 router.post('/coordinat', async (req, res) => {
   console.log('coordinat', req.body.lat);
-  const locations = await Location.findOne({ user: req.session.authUser });
-  console.log('locations', locations);
-  console.log('authUser', req.session.authUser._id);
-  if (locations && req.body.lat) {
-    locations.lat = req.body.lat;
-    locations.lng = req.body.lng;
-    locations.save();
-    const usersLocation = await Location.find();
-    const usersAll = await User.find();
-    const users = usersAll.filter((el) => el._id !== req.session.authUser._id);
 
-    res.json({ usersLocation, users });
-  // res.json({ usersLocation });
-  } else if (req.body.lat) {
+  if (req.body.lat) {
+    const locations = await Location.findOne({ user: req.session.authUser._id });
+    console.log('locations', locations);
+    console.log('authUser', req.session.authUser._id);
+
+    if (locations) {
+      locations.lat = req.body.lat;
+      locations.lng = req.body.lng;
+      locations.save();
+      const usersLocation = await Location.find();
+      const usersAll = await User.find();
+      const users = usersAll.filter((el) => el._id != req.session.authUser._id);
+
+      return res.json({ usersLocation, users });
+    }
+
     const location = await Location.create({
       lat: req.body.lat,
       lng: req.body.lng,
       user: req.session.authUser._id,
     });
-    await location.save();
+    location.save();
 
     const user = await User.findById(req.session.authUser._id);
     user.location = location._id;
@@ -75,10 +67,10 @@ router.post('/coordinat', async (req, res) => {
     const usersLocation = await Location.find();
     const arr = [];
     const usersAll = await User.find();
-    const users = usersAll.filter((el) => el._id != req.session.authUser._id);
+    const users = usersAll.filter((el) => el._id !== req.session.authUser._id);
     // console.log('ARRBACK', users)
 
-    res.json({ usersLocation, users });
+    return res.json({ usersLocation, users });
   }
 });
 router.delete('/coordinat', async (req, res) => {

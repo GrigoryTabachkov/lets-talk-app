@@ -1,7 +1,12 @@
 .App {
+  font-family: 'Josefin Sans', serif;
   text-align: center;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  /*background-color: #D8DEE9;*/
+}
+
+.backGround {
+  z-index: 1;
 }

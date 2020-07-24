@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   BrowserRouter,
   Switch,
   Route,
-  Link,
 } from 'react-router-dom';
 import './App.css';
+import mainBackGround from './assets/Suspension-Bridge-Jungle-Forest.jpg';
 import MapContainer from './components/Map/MapContainer.jsx';
-import Registration from './Registr/Registration.jsx';
-import UserList from './components/UserList/UserLIst';
+import Reg from './Registr/Reg.jsx';
+import Login from './Registr/Login.jsx';
+import Context from './context/Context';
+import Header from './components/Header/Header.jsx';
 
 const styles = {
   div: {
     display: 'flex',
     flexDirection: 'row',
-
   },
 };
 function App() {
   const [formAuth, setFormAuth] = useState({ email: '', password: '' });
   const [user, setUser] = useState('');
-  const form = document.querySelector('.authForm');
-  console.log(form);
-  function handleChange(e) {
-    console.log('click');
+
+  const handleChange = (e) => {
     e.preventDefault();
     console.log(e.target.email.value);
     setFormAuth({ email: e.target.email.value, password: e.target.password.value });
-  }
+  };
+
   useEffect(() => {
     (
       async () => {
@@ -47,59 +47,49 @@ function App() {
       }
     )();
   }, [formAuth]);
-  console.log(user);
+  console.log('YOU', user);
 
   const state = useSelector((state) => state.users);
-  console.log('APP', state);
+  console.log('APP STATE: ', state);
   const arr = [];
-  for (let i = 0; i < state.length; i++) {
+  for (let i = 0; i < state.length; i += 1) {
     if (state[i].location) {
       arr.push(state[i]);
     }
+    console.log('USERARRAY: ', arr);
   }
 
   return (
-
     <>
+      {user && <Header user={user} />}
 
+      <Context.Provider value={{ formAuth, setFormAuth }}>
       <BrowserRouter>
-        {!user && (
-        <div>
-          <Switch>
-            <Route exact path='/'>
-              <form className="authForm" action="" onSubmit={handleChange}>
-                <input name="email" type="text" placeholder="email" />
-                <input name="password" type="password" placeholder="password" />
-                <button type="submit">Sign In</button>
-              </form>
-              <Link to='/registration'>registration</Link>
-            </Route>
-            <Route exact path='/registration'>
-              <Registration />
-              <Link to='/'>Home</Link>
-            </Route>
-          </Switch>
-        </div>
+        {!user && ( // !user  user.userName === ''
+        <Switch>
+          <Route exact path='/'>
+            { /* onSubmit={handleChange} */ }
+            <Login />
+          </Route>
+          <Route exact path='/registration'>
+            <Reg />
+          </Route>
+        </Switch>
 
         )}
       </BrowserRouter>
+      </Context.Provider>
 
-      {user && (
+      {user && ( // user.userName !== ''
       <div className="App">
-        <h1>Let`s talk</h1>
         <div style={styles.div}>
-          <UserList
-            key={Math.floor(Math.random() * 1000)}
-            list={arr}
-          />
-          <MapContainer />
+          {/* <UserLIst list={arr} /> */}
+          <MapContainer data={user} />
         </div>
 
       </div>
       )}
-
     </>
-
   );
 }
 
