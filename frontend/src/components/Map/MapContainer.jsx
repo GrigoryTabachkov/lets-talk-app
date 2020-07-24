@@ -4,11 +4,12 @@ import { usePosition } from 'use-position';
 import {
   GoogleMap, LoadScript, Marker, Circle,
 } from '@react-google-maps/api';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import { toSendCoordinat } from '../../redux/actions/actions';
 import UserList from '../UserList/UserLIst.jsx';
 import Context from '../../context/Context';
 import Chart from '../Chart/Chart.jsx';
-import Button from '@material-ui/core/Button';
 
 const containerStyle = {
   width: '60vw',
@@ -17,6 +18,13 @@ const containerStyle = {
   boxShadow: '',
 };
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+    color: '#5E81AC',
+    backgroundColor: '#A3BE8C',
+  },
+}));
 
 const center = {
   lat: 59.9386300,
@@ -39,6 +47,8 @@ const options = {
 };
 
 function MapContainer({ data }) {
+  const classes = useStyles();
+
   const watch = true;
   const {
     latitude,
@@ -99,10 +109,12 @@ function MapContainer({ data }) {
               zIndex: 1,
             }}
           >
-            <Button onClick={() => {
-              setStateMap(stateEl);
-              setUserChoose('');
-            }}
+            <Button
+              className={classes.button}
+              onClick={() => {
+                setStateMap(stateEl);
+                setUserChoose('');
+              }}
             >
               Full list
             </Button>

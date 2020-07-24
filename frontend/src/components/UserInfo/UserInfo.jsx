@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import FormControl from '@material-ui/core/FormControl';
 import Context from '../../context/Context';
 
 const styles = {
@@ -13,7 +12,7 @@ const styles = {
     margin: 5,
     fontSize: 16,
     fontWeight: 'bold',
-    fontColor: '#ECEFF4',
+    backgroundColor: '#E5E9F0',
   },
   divSelect: {
     display: 'flex',
@@ -21,13 +20,14 @@ const styles = {
     alignItems: 'center',
     border: 'solid black 1px',
     margin: 5,
-    backgroundColor: '#88C0D0',
+    backgroundColor: '#D8DEE9',
     fontSize: 18,
     borderRadius: '15px',
     fontWeight: 'bold',
-    fontColor: 'white',
   },
-
+  userData: {
+    color: '#3B4252',
+  },
 };
 export default function UserInfo({ data }) {
   const { setStateMap, setUserChoose, userChoose } = useContext(Context);
@@ -53,12 +53,12 @@ export default function UserInfo({ data }) {
         setUserChoose(data._id);
       }}
     >
-      <span>{data.userName}</span>
-      <span>Интересы:</span>
+      <span style={styles.userData}>{data.userName}</span>
+      <span style={styles.userData}>Интересы:</span>
       {
-        data.interests.map((el) => <span>{el}</span>)
+        data.interests.map((el) => <span style={styles.userData}>{el}</span>)
       }
-      <span>
+      <span style={styles.userData}>
         Email:
         {data.email}
       </span>

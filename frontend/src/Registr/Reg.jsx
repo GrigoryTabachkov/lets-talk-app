@@ -99,39 +99,44 @@ export default function Reg() {
     Books, Movies, Dogs, Cats, JavaScript, Travel, Cooking, MachineLearning,
   } = checkbox;
 
-  function toPutInterests(e) {
-    setCheckbox({ ...checkbox, [e.target.name]: e.target.checked });
-    e.preventDefault();
-    console.log(interests);
-    setInterests({ ...userData, interests: [...interests.interests, e.target.name] });
-  }
+
 
   const [view, setView] = useState('');
 
   const history = useHistory();
 
-  async function toPutData(e) {
+   function toPutData(e) {
     if (e.target.userName !== '') {
       e.preventDefault();
       console.log('Click2');
       console.log('TARGET>>>>', interests);
 
-      await setUserData({
+       setUserData({
         userName: e.target.userName.value,
         password: e.target.password.value,
         email: e.target.email.value,
         interests: interests.interests,
       });
 
-      await history.push('/');
+       history.push('/');
     }
   }
   console.log(userData);
 
-  const handleChange = (event) => {
+  // const handleChange = (event) => {
+  //   console.log('CHECKBOX CHECK', checkbox);
+  //   setCheckbox({ ...checkbox, [event.target.name]: event.target.checked });
+  // };
+
+  function toPutInterests(e) {
+    e.preventDefault();
     console.log('CHECKBOX CHECK', checkbox);
-    setCheckbox({ ...checkbox, [event.target.name]: event.target.checked });
-  };
+    setCheckbox({ ...checkbox, [e.target.name]: e.target.checked });
+    console.log(interests);
+    setInterests({ ...userData, interests: [...interests.interests, e.target.name] });
+  }
+
+
 
   const error = [Books, Movies, Dogs, Cats, JavaScript, Travel, Cooking, MachineLearning].filter((v) => v).length < 3;
   const errorFive = [Books, Movies, Dogs, Cats, JavaScript, Travel, Cooking, MachineLearning].filter((v) => v).length >= 5;
@@ -199,7 +204,7 @@ export default function Reg() {
                     control={(
                       <Checkbox
                         checked={Books}
-                        onChange={handleChange}
+                        onChange={toPutInterests}
                         name="Books"
                         icon={<FavoriteBorder />}
                         checkedIcon={<Favorite />}

@@ -24,8 +24,15 @@ router.post('/author', async (req, res) => {
 });
 router.post('/registration', async (req, res) => {
   console.log('INFO', req.body.userData.userName);
+  const interestsArr = [];
+  req.body.userData.interests.forEach((el) => {
+    if (!interestsArr.includes(el)) {
+      interestsArr.push(el);
+    }
+  });
+  console.log(interestsArr);
   try {
-    const user = await User.reg(req.body.userData.userName, req.body.userData.email, req.body.userData.password, req.body.userData.interests);
+    const user = await User.reg(req.body.userData.userName, req.body.userData.email, req.body.userData.password, interestsArr);
 
     res.json({ user });
   } catch (error) {
@@ -50,6 +57,7 @@ router.post('/coordinat', async (req, res) => {
       const users = usersAll.filter((el) => el._id != req.session.authUser._id);
 
       return res.json({ usersLocation, users });
+
     }
 
     const location = await Location.create({
@@ -62,7 +70,7 @@ router.post('/coordinat', async (req, res) => {
     const user = await User.findById(req.session.authUser._id);
     user.location = location._id;
     user.save();
-    req.session.authUser = user;
+    // req.session.authUser = user;
     // console.log(req.session.authUser);
     const usersLocation = await Location.find();
     const arr = [];

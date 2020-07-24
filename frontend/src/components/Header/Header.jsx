@@ -15,21 +15,29 @@ const useStyles = makeStyles((theme) => ({
     // backgroundColor: '#D8DEE9',
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
     display: 'flex',
+    margin: '1px',
     textAlign: 'center',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    color: theme.palette.text.secondary,
+    fontSize: '22px',
+    fontWeight: 'bold',
+    color: '#3B4252',
   },
   control: {
     padding: theme.spacing(2),
+    margin: '1px',
     display: 'flex',
     textAlign: 'center',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    fontSize: '18px',
+    fontWeight: 'bold',
+    color: '#88C0D0',
+    hover: true,
   },
 }));
 
@@ -42,10 +50,8 @@ export default function Header(user) {
       style={{ backgroundImage: logo2 }}
     >
       <Grid
-        // item
-        // xs={6}
         direction="column"
-        className={classes.control}
+        className={classes.paper}
       >
 
         <Paper className={classes.paper}>
@@ -55,9 +61,14 @@ export default function Header(user) {
           ,
           Glad to see you!
         </Paper>
-        <Paper className={classes.paper}>
-          Let`s check your interests for today:
-        </Paper>
+        <Grid
+          direction="column"
+          className={classes.paper}
+        >
+          <Paper className={classes.paper}>
+            Let`s check your interests for today:
+          </Paper>
+        </Grid>
       </Grid>
 
       <Grid
@@ -67,13 +78,21 @@ export default function Header(user) {
         className={classes.control}
       >
         {user.user.user.interests.map((el) => (
-          <Paper direction="row" className={classes.control}>
+          <Paper
+            direction="row"
+            style={{
+              hover: {
+                boxShadow: '0 0 11px rgba(33,33,33,.2)',
+              },
+            }}
+            className={classes.control}
+          >
             {el}
           </Paper>
         ))}
       </Grid>
       {' '}
-      <img height="240px" width="440px" src={logo2} alt="Lets Talk" />
+      <img height="180px" width="720px" src={logo2} alt="Lets Talk" />
     </header>
   );
 }

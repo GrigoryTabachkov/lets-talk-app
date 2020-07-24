@@ -15,7 +15,8 @@
     }
   },
   "rules": {
-    "no-console": "warn",
+    "no-underscore-dangle": 0,
+    "no-console": 0,
     "no-debugger": "warn",
     "react/prop-types": 0,
     "react-hooks/rules-of-hooks": "error",
