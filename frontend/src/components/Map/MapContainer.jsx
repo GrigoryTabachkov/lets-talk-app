@@ -1,15 +1,30 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePosition } from 'use-position';
 import {
-  GoogleMap, LoadScript, Marker, Circle, InfoBox,
+  GoogleMap, LoadScript, Marker, Circle,
 } from '@react-google-maps/api';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import { toSendCoordinat } from '../../redux/actions/actions';
+import UserList from '../UserList/UserLIst.jsx';
+import Context from '../../context/Context';
+import Chart from '../Chart/Chart.jsx';
 
 const containerStyle = {
-  width: '50vw',
-  height: '50vh',
+  width: '60vw',
+  height: '60vh',
+  borderRadius: '10px',
+  boxShadow: '',
 };
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1),
+    color: '#5E81AC',
+    backgroundColor: '#A3BE8C',
+  },
+}));
 
 const center = {
   lat: 59.9386300,
@@ -27,11 +42,10 @@ const options = {
   editable: false,
   visible: true,
   radius: 50,
-  // mapTypeControl: false,
-  // navigationControl: false,
 };
 
-function MapContainer() {
+function MapContainer({ data }) {
+  const classes = useStyles();
 
   const watch = true;
   const {
@@ -48,73 +62,98 @@ function MapContainer() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setInterval(() => {
-      dispatch(toSendCoordinat({ lat: latitude, lng: longitude }));
-    }, 1000);
+    dispatch(toSendCoordinat({ lat: latitude, lng: longitude }));
   }, [dispatch, latitude, longitude]);
 
-  const stateEl = useSelector((state) => state.locations); // locations
-  // const userInformation = useSelector((state) => state.users);
-
-  console.log('STATEEL', stateEl);
-  // console.log('USERNAME:', userInformation.userName);
+  const state = useSelector((state) => state);
+  const stateEl = state.locations;
+  const stateUsers = state.users;
 
   const [stateMap, setStateMap] = useState([]);
+  const [userChoose, setUserChoose] = useState('');
 
   useEffect(() => {
     setStateMap(stateEl);
   }, [stateEl]);
 
-  // const [map, setMap] = React.useState(null);
-  // const onLoad = useCallback((map) => {
-  //   const bounds = new window.google.maps.LatLngBounds();
-  //   map.fitBounds(bounds);
-  //   setMap(map);
-  // }, []);
-
-  const infoBoxOptions = { closeBoxURL: '', enableEventPropagation: true };
-
   return (
-    <LoadScript
-      googleMapsApiKey="AIzaSyDZEnptJhEhjeXm-meAeEJJx3TkvTdO3yo"
+    <div
+      className="mapAndList"
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
     >
-      <div id="map">
-        <GoogleMap
-          // onLoad={onLoad}
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={11}
+
+      <Context.Provider value={{
+        userChoose,
+        setUserChoose,
+        setStateMap,
+      }}
+      >
+        <LoadScript
+          googleMapsApiKey="AIzaSyDZEnptJhEhjeXm-meAeEJJx3TkvTdO3yo"
         >
-          { /* Child components, such as markers, info windows, etc. */ }
-          {
-          stateMap.map((el) => (
-            <Marker
-              text={el.user}
-              key={el.user + Math.floor(Math.random() * 10000)}
-              position={{ lat: Number(el.lat), lng: Number(el.lng) }}
+          <div
+            className="chartContainer"
+            style={{
+              backgroundColor: 'rgba(216, 222, 233, 0.5)',
+              borderRadius: '10px',
+              zIndex: 1,
+            }}
+          >
+            <Button
+              className={classes.button}
+              onClick={() => {
+                setStateMap(stateEl);
+                setUserChoose('');
+              }}
             >
-              <Circle
-                radius={100}
-                center={{ lat: Number(el.lat), lng: Number(el.lng) }}
-                options={options}
-              />
-              <InfoBox
-                options={infoBoxOptions}
-                position={{ lat: Number(el.lat), lng: Number(el.lng) }}
-              >
-                <div style={{ backgroundColor: 'green', opacity: 0.55, padding: 12 }}>
-                  <div style={{ fontSize: 12, fontColor: '#08233B' }}>
-                    Имя:
-                    {el.accuracy}
-                  </div>
-                </div>
-              </InfoBox>
-            </Marker>
-          ))
-        }
-        </GoogleMap>
-      </div>
-    </LoadScript>
+              Full list
+            </Button>
+            <UserList list={stateUsers} />
+            <Chart user={data} />
+          </div>
+
+          <div id="map">
+            <GoogleMap
+          // onLoad={onLoad}
+              mapContainerStyle={containerStyle}
+              center={center}
+              zoom={11}
+            >
+
+              {stateMap.map((el) => (
+                <Marker
+                  text={el.user}
+                  key={el.user + Math.floor(Math.random() * 10000)}
+                  position={{ lat: Number(el.lat), lng: Number(el.lng) }}
+                >
+                  <Circle
+                    radius={100}
+                    center={{ lat: Number(el.lat), lng: Number(el.lng) }}
+                    options={options}
+                  />
+                  {/* <InfoBox */}
+                  {/*  options={infoBoxOptions} */}
+                  {/*  position={{ lat: Number(el.lat), lng: Number(el.lng) }} */}
+                  {/* > */}
+                  {/*  <div style={{ backgroundColor: 'green', opacity: 0.55, padding: 12 }}> */}
+                  {/*    <div style={{ fontSize: 12, fontColor: '#08233B' }}> */}
+                  {/*      Имя: */}
+                  {/*      {el.userName} */}
+                  {/*    </div> */}
+                  {/*  </div> */}
+                  {/* </InfoBox> */}
+                </Marker>
+              ))}
+            </GoogleMap>
+          </div>
+
+        </LoadScript>
+      </Context.Provider>
+    </div>
   );
 }
 

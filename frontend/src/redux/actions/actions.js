@@ -6,7 +6,6 @@ export const watchUserPosition = (payload) => ({
 }
 );
 export const toSendCoordinat = (payload) => async (dispatch) => {
-  console.log('ACTION_PAYLOAD>>>', payload);
   if (payload.lat !== '') {
     const response = await fetch('/coordinat', {
       method: 'POST',
@@ -19,8 +18,6 @@ export const toSendCoordinat = (payload) => async (dispatch) => {
       }),
     });
     const res = await response.json();
-    console.log('RESSSSSS', res);
-
     dispatch(watchUserPosition(res));
   }
 };
