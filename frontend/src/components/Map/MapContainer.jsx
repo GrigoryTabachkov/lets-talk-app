@@ -42,8 +42,6 @@ const options = {
   editable: false,
   visible: true,
   radius: 50,
-  // mapTypeControl: false,
-  // navigationControl: false,
 };
 
 function MapContainer({ data }) {
@@ -64,9 +62,7 @@ function MapContainer({ data }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // setInterval(() => {
     dispatch(toSendCoordinat({ lat: latitude, lng: longitude }));
-    // }, 1000);
   }, [dispatch, latitude, longitude]);
 
   const state = useSelector((state) => state);
@@ -79,8 +75,6 @@ function MapContainer({ data }) {
   useEffect(() => {
     setStateMap(stateEl);
   }, [stateEl]);
-
-  // const infoBoxOptions = { closeBoxURL: '', enableEventPropagation: true };
 
   return (
     <div

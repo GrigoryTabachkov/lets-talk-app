@@ -6,7 +6,6 @@ import {
   Route,
 } from 'react-router-dom';
 import './App.css';
-import mainBackGround from './assets/Suspension-Bridge-Jungle-Forest.jpg';
 import MapContainer from './components/Map/MapContainer.jsx';
 import Reg from './Registr/Reg.jsx';
 import Login from './Registr/Login.jsx';
@@ -22,12 +21,6 @@ const styles = {
 function App() {
   const [formAuth, setFormAuth] = useState({ email: '', password: '' });
   const [user, setUser] = useState('');
-
-  const handleChange = (e) => {
-    e.preventDefault();
-    console.log(e.target.email.value);
-    setFormAuth({ email: e.target.email.value, password: e.target.password.value });
-  };
 
   useEffect(() => {
     (
@@ -64,26 +57,24 @@ function App() {
       {user && <Header user={user} />}
 
       <Context.Provider value={{ formAuth, setFormAuth }}>
-      <BrowserRouter>
-        {!user && ( // !user  user.userName === ''
-        <Switch>
-          <Route exact path='/'>
-            { /* onSubmit={handleChange} */ }
-            <Login />
-          </Route>
-          <Route exact path='/registration'>
-            <Reg />
-          </Route>
-        </Switch>
+        <BrowserRouter>
+          {!user && (
+          <Switch>
+            <Route exact path='/'>
+              <Login />
+            </Route>
+            <Route exact path='/registration'>
+              <Reg />
+            </Route>
+          </Switch>
 
-        )}
-      </BrowserRouter>
+          )}
+        </BrowserRouter>
       </Context.Provider>
 
-      {user && ( // user.userName !== ''
+      {user && (
       <div className="App">
         <div style={styles.div}>
-          {/* <UserLIst list={arr} /> */}
           <MapContainer data={user} />
         </div>
 

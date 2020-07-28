@@ -43,16 +43,12 @@ export default function Chart({ user }) {
 
   const [message, setMessage] = useState([]);
   const { userChoose } = useContext(Context);
-  console.log('userChoose', userChoose);
 
   console.log('ChartUser', user.user._id);
   const W1 = new WebSocket('ws://localhost:8090');
   W1.onopen = () => {
-    console.log('connect');
   };
   W1.onmessage = (data) => {
-    console.log('Message!!!!', JSON.parse(data.data));
-
     const dataParse = JSON.parse(data.data);
     const rightMess = dataParse.charts.filter((el) => {
       if (el.userId1 === user.user._id || el.userId2 === user.user._id) {
@@ -62,14 +58,8 @@ export default function Chart({ user }) {
     setMessage(rightMess);
   };
 
-  W1.onclose = function () {
-    console.log('connectionClose');
-  };
-
   function handleClick(e) {
     e.preventDefault();
-    console.log('ClickChart', e.target.myMes.value);
-    // W2.send(user.user._id);
     W1.send(JSON.stringify({
       text: e.target.myMes.value,
       userName: user.user.userName,

@@ -19,7 +19,7 @@ export default function UserLIst({ list }) {
         {
         list.map((el) => (
           <UserInfo
-            key={Math.floor(Math.random() * 1000)}
+            key={Math.floor(Math.random() * 10000)}
             data={el}
           />
         ))

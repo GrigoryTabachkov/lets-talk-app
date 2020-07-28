@@ -73,14 +73,13 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const classes = useStyles();
 
-  const { formAuth, setFormAuth } = useContext(Context);
+  const { setFormAuth } = useContext(Context);
 
   const submitHandler = (e) => {
     e.preventDefault();
     console.log(e.target.email.value);
     setFormAuth({ email: e.target.email.value, password: e.target.password.value });
   };
-  console.log('LOGIN SUBMIT: ', formAuth, Context);
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -134,11 +133,6 @@ export default function Login() {
               Let&#39;s Talk
             </Button>
             <Grid container>
-              {/* <Grid item xs> */}
-              {/*  <Link href="#" variant="body2"> */}
-              {/*    Forgot password? */}
-              {/*  </Link> */}
-              {/* </Grid> */}
               <Grid item xs>
                 <Link href="/registration" variant="body1" className={classes.link}>
                   Don&#39;t have an account? Sign Up

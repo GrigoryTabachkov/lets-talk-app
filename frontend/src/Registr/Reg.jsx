@@ -17,7 +17,6 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import { Favorite, FavoriteBorder } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
-import zIndex from '@material-ui/core/styles/zIndex';
 
 function Copyright() {
   return (
@@ -52,9 +51,6 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
-    // '&:hover': {
-    //   boxShadow: 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
-    // },
   },
   formControl: {
     margin: theme.spacing(3),
@@ -99,44 +95,29 @@ export default function Reg() {
     Books, Movies, Dogs, Cats, JavaScript, Travel, Cooking, MachineLearning,
   } = checkbox;
 
-
-
-  const [view, setView] = useState('');
+  const [setView] = useState('');
 
   const history = useHistory();
 
-   function toPutData(e) {
+  async function toPutData(e) {
     if (e.target.userName !== '') {
       e.preventDefault();
-      console.log('Click2');
-      console.log('TARGET>>>>', interests);
 
-       setUserData({
+      await setUserData({
         userName: e.target.userName.value,
         password: e.target.password.value,
         email: e.target.email.value,
         interests: interests.interests,
       });
-
-       history.push('/');
+      history.push('/');
     }
   }
-  console.log(userData);
-
-  // const handleChange = (event) => {
-  //   console.log('CHECKBOX CHECK', checkbox);
-  //   setCheckbox({ ...checkbox, [event.target.name]: event.target.checked });
-  // };
 
   function toPutInterests(e) {
     e.preventDefault();
-    console.log('CHECKBOX CHECK', checkbox);
     setCheckbox({ ...checkbox, [e.target.name]: e.target.checked });
-    console.log(interests);
     setInterests({ ...userData, interests: [...interests.interests, e.target.name] });
   }
-
-
 
   const error = [Books, Movies, Dogs, Cats, JavaScript, Travel, Cooking, MachineLearning].filter((v) => v).length < 3;
   const errorFive = [Books, Movies, Dogs, Cats, JavaScript, Travel, Cooking, MachineLearning].filter((v) => v).length >= 5;
@@ -155,7 +136,6 @@ export default function Reg() {
             }),
           });
           const res = await response.json();
-          console.log(res);
           setView(res);
         }
       }
